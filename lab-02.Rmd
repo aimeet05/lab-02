@@ -1,6 +1,6 @@
 ---
 title: "Lab 02 - Global plastic waste"
-author: "Fantastic-6: Katya Cheltsova, Kayleigh Innes, User3 and User4"
+author: "Fantastic-6: Katya Cheltsova, Kayleigh Innes, Frederick Elson and User4"
 date: "`r Sys.Date()`"
 output: html_document
 ---
