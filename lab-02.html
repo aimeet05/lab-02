@@ -11,7 +11,7 @@
 
 <meta name="author" content="Fantastic-6: Katya Cheltsova, Kayleigh Innes, Frederick Elson and Aimee Tumblety" />
 
-<meta name="date" content="2023-10-06" />
+<meta name="date" content="2023-10-07" />
 
 <title>Lab 02 - Global plastic waste</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Lab 02 - Global plastic waste</h1>
 <h4 class="author">Fantastic-6: Katya Cheltsova, Kayleigh Innes,
 Frederick Elson and Aimee Tumblety</h4>
-<h4 class="date">2023-10-06</h4>
+<h4 class="date">2023-10-07</h4>
 
 </div>
 
@@ -441,29 +441,73 @@ countries/territories</strong></p>
 <h3>Ex 2.</h3>
 <pre class="r"><code># Write your code here to answer exercise 2
 
+plastic_data_all &lt;- plastic_data_all %&gt;%
+  mutate(total_mismanaged_plastic = mismanaged_plastic*population)
+
 plastic_data_all %&gt;%
-  mutate(total_mismanaged_plastic = mismanaged_plastic*population) %&gt;%
   group_by(region) %&gt;%
-  summarise(mean_mismanaged_waste = mean(total_mismanaged_plastic))</code></pre>
+  summarise(avg_total = mean(total_mismanaged_plastic))</code></pre>
 <pre><code>## # A tibble: 6 × 2
-##   region                          mean_mismanaged_waste
-##   &lt;chr&gt;                                           &lt;dbl&gt;
-## 1 Africa                                        320729.
-## 2 Asia                                         1026059.
-## 3 Europe                                         38180.
-## 4 Latin America and The Caribbean               193450.
-## 5 North America                                 147190.
-## 6 Oceania                                        14577.</code></pre>
+##   region                          avg_total
+##   &lt;chr&gt;                               &lt;dbl&gt;
+## 1 Africa                            320729.
+## 2 Asia                             1026059.
+## 3 Europe                             38180.
+## 4 Latin America and The Caribbean   193450.
+## 5 North America                     147190.
+## 6 Oceania                            14577.</code></pre>
 <p><strong>Highest region is Asia and the lowest region is
 Oceania</strong></p>
 </div>
 <div id="ex-3." class="section level3">
 <h3>Ex 3.</h3>
-<pre class="r"><code># Write your code here to answer exercise 3</code></pre>
+<pre class="r"><code># Write your code here to answer exercise 3
+
+plastic_data_all &lt;- plastic_data_all %&gt;% 
+  mutate(pct_mismanged_plastic_ocean = mismanaged_plastic_ocean / mismanaged_plastic)
+
+plastic_data_all %&gt;%
+  drop_na() %&gt;%
+  group_by(region) %&gt;%
+  summarise(med_pct = median(pct_mismanged_plastic_ocean))</code></pre>
+<pre><code>## # A tibble: 6 × 2
+##   region                          med_pct
+##   &lt;chr&gt;                             &lt;dbl&gt;
+## 1 Africa                          0.00526
+## 2 Asia                            0.00974
+## 3 Europe                          0.00846
+## 4 Latin America and The Caribbean 0.0307 
+## 5 North America                   0.00959
+## 6 Oceania                         0.0158</code></pre>
+<p><strong>Somalia has no plastic waste therefore when it tries to
+calculate a percentage (0/0) it is unable, that’s why Africa is NA
+because there is a missing value.</strong></p>
+<p><strong>Africa has the lowest median</strong></p>
 </div>
 <div id="ex-4." class="section level3">
 <h3>Ex 4.</h3>
-<pre class="r"><code># Write your code here to answer exercise 4</code></pre>
+<pre class="r"><code># Write your code here to answer exercise 4
+
+plastic_data_all &lt;- plastic_data_all %&gt;%
+  rename(
+    pop = population,
+    ocean_plastic = mismanaged_plastic_ocean,
+    plastic = mismanaged_plastic,
+    pct_ocean = pct_mismanged_plastic_ocean,
+    tot_plastic = total_mismanaged_plastic
+    )</code></pre>
+<pre class="r"><code>plastic_data_all &lt;- plastic_data_all %&gt;% 
+  mutate(region = str_replace_all(region, &quot;Latin America and The Caribbean&quot;, &quot;LAC&quot;))
+
+plastic_data_all %&gt;% head(n=5)</code></pre>
+<pre><code>## # A tibble: 5 × 8
+##   code  region     pop ocean_plastic name          plastic tot_plastic pct_ocean
+##   &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;         &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+## 1 AGO   Africa 31808.        0.0270  Angola          7.45      236821.   0.00363
+## 2 ALB   Europe  2876.        0.543   Albania        24.2        69703.   0.0224 
+## 3 ARE   Asia    9176.        0.00143 United Arab …   0.526       4822.   0.00273
+## 4 ARG   LAC    44583.        0.0924  Argentina      10.4       463744.   0.00888
+## 5 ATG   LAC       91.9       0.0206  Antigua and …   6.46         594.   0.00319</code></pre>
 </div>
 </div>
 
